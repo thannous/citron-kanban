@@ -9,6 +9,10 @@ beforeAll(async () => { await rm('.runtime/e2e-demo.json', {force:true}); });
 test('read-only snapshot, truthful fixture label and search', async ({app, screen, browser}) => {
   await app.open();
   await expect(screen.getByRole('article')).toHaveCount(11);
+  const card = screen.getByRole('article', 'Préparer le dossier de démonstration');
+  const references = card.getByRole('group', 'Tickets associés');
+  await expect(references.getByRole('link', 'DEMO-101')).toHaveAttribute('href', 'https://example.org/issues/DEMO-101');
+  await expect(screen.getByText('Sans ticket', {exact:true})).toHaveCount(10);
   await expect(screen.getByText('DONNÉES FICTIVES · lecture seule')).toBeVisible();
   await expect(screen.getByRole('combobox', 'Déplacer « Préparer le dossier de démonstration »')).toBeDisabled();
   await screen.getByRole('searchbox', 'Filtrer les cartes').fill('DEMO-101');
@@ -19,6 +23,29 @@ test('read-only snapshot, truthful fixture label and search', async ({app, scree
   await screen.getByRole('button', 'Relire l’instantané').tap();
   await expect(screen.getByRole('alert', 'Erreur de synchronisation')).toBeHidden();
   await app.screenshot('desktop-fixture');
+});
+
+test('ticket headers use runtime identifiers, dedupe linked issues and never invent missing links', async ({app,screen,browser}) => {
+  const board = await (await fetch(new URL('/api/board',app.baseUrl))).json();
+  const before = structuredClone(board.positions);
+  board.linear.issues.push({id:'demo-id-202',identifier:'DEMO-202',uuid:'demo-uuid-202',title:'Autre ticket fictif',url:'https://example.org/issues/DEMO-202'});
+  board.cards.find(c=>c.id==='drive').issueRefs=['DEMO-101','demo-id-202','DEMO-202'];
+  board.cards.find(c=>c.id==='listing').issueRefs=['DEMO-303'];
+  await browser.route('**/api/board*', async route => { await route.fulfill({json:board}); });
+  await app.open();
+  const card = screen.getByRole('article', 'Préparer le dossier de démonstration');
+  const references = card.getByRole('group', 'Tickets associés');
+  await expect(references.getByRole('link')).toHaveCount(2);
+  await expect(references.getByRole('link', 'DEMO-202')).toHaveAttribute('href','https://example.org/issues/DEMO-202');
+  const missing = screen.getByRole('article', 'Lister les éléments à traiter').getByRole('group','Tickets associés');
+  await expect(missing.getByText('DEMO-303',{exact:true})).toBeVisible();
+  await expect(missing.getByRole('link')).toHaveCount(0);
+  const order = await browser.evaluate(() => {
+    const card=document.querySelector('[data-card="drive"]');
+    return {firstClass:card?.firstElementChild?.className,headerTop:card?.querySelector('.card-head')?.getBoundingClientRect().top,titleTop:card?.querySelector('h2')?.getBoundingClientRect().top};
+  });
+  assert.equal(order.firstClass,'card-head');assert.ok(order.headerTop! < order.titleTop!);
+  assert.deepEqual((await (await fetch(new URL('/api/board',app.baseUrl))).json()).positions,before);
 });
 
 test('demo save, offline queue, reload recovery, conflict choices and retry after failure', async ({app,screen,browser}) => {

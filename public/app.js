@@ -1,4 +1,4 @@
-import { DRAFT_KEY, validateDraft, validateLegacy } from './model.js';
+import { DRAFT_KEY, validateDraft, validateLegacy, ticketReferences } from './model.js';
 
 export async function mount() {
 const $ = id => document.getElementById(id);
@@ -124,8 +124,23 @@ function render() {
       card.draggable = mode === 'demo' && !p && !busy && !corruptDraft;
       card.addEventListener('dragstart', e => { drag = c.id; e.dataTransfer.setData('text/plain', c.id); });
       card.addEventListener('dragend', () => { drag = null; });
-      card.append(node('span', 'tag ' + c.type, c.tag), node('h2', '', c.title), node('p', '', c.body), node('p', 'next', c.next));
-      if (c.owner) card.append(node('p', 'owner', 'Responsable de coordination : ' + c.owner + ' · sans échéance'));
+      const cardHead = node('div', 'card-head');
+      const references = node('div', 'ticket-refs');
+      references.setAttribute('role', 'group'); references.setAttribute('aria-label', 'Tickets associés');
+      const tickets = ticketReferences(c, board.linear.issues);
+      for (const ticket of tickets) {
+        const badge = node(ticket.url ? 'a' : 'span', 'ticket-ref', ticket.ref);
+        if (ticket.url) {
+          badge.href = ticket.url; badge.target = '_blank'; badge.rel = 'noopener noreferrer'; badge.title = ticket.title;
+        } else badge.title = 'Lien du ticket indisponible dans les données chargées';
+        badge.draggable = false;
+        references.append(badge);
+      }
+      if (!tickets.length) references.append(node('span', 'ticket-ref no-ticket', 'Sans ticket'));
+      cardHead.append(references, node('span', 'tag ' + c.type, c.tag));
+      card.append(cardHead, node('h2', '', c.title), node('p', '', c.body), node('p', 'next', c.next));
+      if (c.owner) card.append(node('p', 'owner', (c.ownerLabel || 'Responsable de coordination') + ' : ' + c.owner + ' · sans échéance'));
+      if (c.updatedAt) card.append(node('p', 'updated-at', 'Actualisé le ' + date(c.updatedAt)));
       if (col === 'blocked' && (board.legacySplitReview?.includes(c.id) || (c.legacyCombined && board.positions[c.id].revision === 0))) card.append(node('p', 'migration', 'Ancienne colonne « À trancher / bloqué » : position conservée dans Bloqué, à préciser.'));
       const links = c.links || (c.link ? [[c.ref, c.link]] : []);
       for (const [text, url] of links) {
