@@ -102,3 +102,23 @@ identifiants d’opérations. Une ancienne position `blocked` de la colonne comb
 reste dans « Bloqué », avec un signalement à préciser ; aucune décision n’est
 inventée pour répartir les cartes. Les positions originales du navigateur sont
 préservées et ne sont pas automatiquement importées.
+
+## Socle multiprojets et agents
+
+Le produit est un compagnon général de suivi de projets. Les données chargées
+portent un identifiant de projet ; le démonstrateur affiche un seul projet à la
+fois. La connexion simultanée de plusieurs projets n’est pas implémentée.
+`adapters/project-contract.ts` prépare les contrats de lecture par projet et exige
+des clés de stockage/file d’attente isolées par projet pour cette extension.
+
+L’orchestration d’agents est explicitement non configurée : aucun agent lancé,
+aucune permission d’exécution, aucune intégration d’orchestrateur. Une évaluation
+séparée sera nécessaire avant toute implémentation. Les propositions d’agents ou
+de tickets ne constituent jamais une autorisation d’exécution.
+
+Une évolution pourra brancher un moteur optionnel derrière l’interface `AgentRunner`,
+désactivée par défaut, en conservant le cockpit Next.js indépendant. L’évaluation
+d’un moteur ne déclenche aucune intégration. Avant une exécution réelle, définir
+isolation, validations, budgets et journalisation ; ces garanties ne sont pas
+implémentées ici. Aucun exemple de workflow permissif n’est importé et aucune base
+de données privée n’est ajoutée : documents dans Drive, tâches dans Linear.

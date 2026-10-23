@@ -159,5 +159,9 @@
       "Définir les règles de correspondance avec les états du gestionnaire de tickets.",
       "Valider les preuves attendues avant de déclarer une tâche terminée."
     ]
+  },
+  "project": {
+    "id": "demo-project",
+    "name": "Projet de démonstration"
   }
 }

@@ -104,6 +104,7 @@ function render() {
     presentation.summary.forEach((text, index) => $('summary-' + index).textContent = text);
     $('decisions').replaceChildren(...presentation.decisions.map(text => node('li', '', text)));
   }
+  if ($('project-scope')) $('project-scope').textContent = 'Projet affiché : ' + (board.project?.name || 'Démonstration') + ' · Orchestration d’agents : non configurée';
   const query = $('search').value.toLocaleLowerCase('fr');
   for (const [col, title] of board.cols) {
     const section = node('section', 'column'); section.dataset.col = col; section.setAttribute('aria-label', title);

@@ -28,7 +28,8 @@ export async function createService({ root = process.cwd(), dataDir = join(root,
         const positions = mode === 'demo' ? store.view() : {revision:0,updatedAt:null,positions:Object.fromEntries(seed.cards.map(c=>[c.id,{col:c.col,revision:0}]))};
         return {...seed,...positions,mode,linear:snapshot,
           linearMapping:{byName:{Backlog:'todo',Todo:'todo','In Progress':'doing','In Review':'verify',Done:'done'},byType:{backlog:'todo',unstarted:'todo',started:'doing',completed:'done'},coordinationOnly:['decide','blocked']},
-          capabilities:{persistentLinear:false,writeLinear:false,writeDemo:mode==='demo'}};
+          orchestration:{configured:false,runningAgents:[],executionEnabled:false},
+          capabilities:{persistentLinear:false,writeLinear:false,writeDemo:mode==='demo',multiProjectConnection:false,agentExecution:false}};
       }
       if (method === 'POST' && path === '/api/linear/refresh') return linear.refresh();
       if (method === 'POST' && path === '/api/move') {

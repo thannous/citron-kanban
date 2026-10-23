@@ -18,6 +18,9 @@ test('HTTP contract: isolated modes, shared demo, errors, conflicts, private bou
   assert.deepEqual(snapshot.cols.map(([,name])=>name),['À faire','En cours','À trancher','Bloqué','À vérifier','Terminé']);
   assert.equal(snapshot.linearMapping.byName['In Review'],'verify');
   assert.deepEqual(snapshot.linearMapping.coordinationOnly,['decide','blocked']);
+  assert.equal(snapshot.capabilities.agentExecution,false);
+  assert.equal(snapshot.orchestration.configured,false);
+  assert.deepEqual(snapshot.orchestration.runningAgents,[]);
   const op = {cardId:'drive',col:'doing',baseRevision:0,operationId:'api-operation-1'};
   assert.equal((await post('/api/move',op)).status,403);
   assert.equal((await post('/api/linear/refresh',{})).status,503);
