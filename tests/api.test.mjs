@@ -14,7 +14,10 @@ test('HTTP contract: isolated modes, shared demo, errors, conflicts, private bou
   const get = path => fetch(base+path);
   const post = (path,body,headers={}) => fetch(base+path,{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)});
   const snapshot = await (await get('/api/board')).json(); assert.equal(snapshot.mode,'snapshot'); assert.equal(snapshot.linear.mode,'fixture');
-  assert.equal(snapshot.cards.length,11); assert.equal(snapshot.cols.length,5); assert.equal(snapshot.capabilities.writeLinear,false);
+  assert.equal(snapshot.cards.length,11); assert.equal(snapshot.cols.length,6); assert.equal(snapshot.capabilities.writeLinear,false);
+  assert.deepEqual(snapshot.cols.map(([,name])=>name),['À faire','En cours','À trancher','Bloqué','À vérifier','Terminé']);
+  assert.equal(snapshot.linearMapping.byName['In Review'],'verify');
+  assert.deepEqual(snapshot.linearMapping.coordinationOnly,['decide','blocked']);
   const op = {cardId:'drive',col:'doing',baseRevision:0,operationId:'api-operation-1'};
   assert.equal((await post('/api/move',op)).status,403);
   assert.equal((await post('/api/linear/refresh',{})).status,503);

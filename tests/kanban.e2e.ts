@@ -61,13 +61,13 @@ test('demo save, offline queue, reload recovery, conflict choices and retry afte
   await expect(move).toBeDisabled();
 });
 
-test('mobile preserves five columns, scroll and accessible move control', async ({app,screen,browser}) => {
+test('mobile preserves six columns, scroll and accessible move control', async ({app,screen,browser}) => {
   await browser.setViewport({width:390,height:844});
   await app.open();
   await expect(screen.getByRole('article')).toHaveCount(11);
   const dimensions = await browser.evaluate(() => ({viewport:innerWidth, page:document.documentElement.scrollWidth,
     columns:document.querySelectorAll('.column').length, board:document.querySelector('.board')!.scrollWidth}));
-  assert.equal(dimensions.columns,5); assert.equal(dimensions.page,dimensions.viewport); assert.ok(dimensions.board > dimensions.viewport);
+  assert.equal(dimensions.columns,6); assert.equal(dimensions.page,dimensions.viewport); assert.ok(dimensions.board > dimensions.viewport);
   await screen.getByRole('combobox', 'Source').selectOption({value:'demo'});
   const move = screen.getByRole('combobox', 'Déplacer « Lister les éléments à traiter »');
   await expect(move).toBeEnabled();

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "cols": [
     [
       "todo",
@@ -10,8 +10,12 @@
       "En cours"
     ],
     [
+      "decide",
+      "À trancher"
+    ],
+    [
       "blocked",
-      "À trancher / bloqué"
+      "Bloqué"
     ],
     [
       "verify",
@@ -19,7 +23,7 @@
     ],
     [
       "done",
-      "Terminé / prouvé"
+      "Terminé"
     ]
   ],
   "cards": [
@@ -75,7 +79,8 @@
       "title": "Confirmer les variantes de démonstration",
       "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
       "next": "Relire les éléments et confirmer la prochaine étape de test.",
-      "issueRefs": []
+      "issueRefs": [],
+      "legacyCombined": true
     },
     {
       "id": "supply",
@@ -85,7 +90,8 @@
       "title": "Arbitrer les paramètres exemple",
       "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
       "next": "Relire les éléments et confirmer la prochaine étape de test.",
-      "issueRefs": []
+      "issueRefs": [],
+      "legacyCombined": true
     },
     {
       "id": "acceptance",
@@ -95,7 +101,8 @@
       "title": "Définir les critères de revue",
       "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
       "next": "Relire les éléments et confirmer la prochaine étape de test.",
-      "issueRefs": []
+      "issueRefs": [],
+      "legacyCombined": true
     },
     {
       "id": "merge",

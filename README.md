@@ -1,6 +1,6 @@
 # Compagnon Kanban citron
 
-Prototype Next.js séparé de toute application métier. Cinq colonnes, onze cartes
+Prototype Next.js séparé de toute application métier. Six colonnes, onze cartes
 fictives, palette vert citron/jaune citron et contrôles accessibles au clavier.
 Le code générique et les exemples sont sous licence MIT.
 
@@ -81,3 +81,24 @@ Le harnais `server.mjs` sert seulement aux contrats HTTP automatisés.
 Avant publication : examiner tous les fichiers suivis et l’historique complet ; ne
 jamais forcer l’ajout de `.private/`, `.runtime/`, `.next/` ou `.e2e/`.
 Aucun déploiement ni service web public n’est inclus.
+
+## Correspondance de lecture avec Linear
+
+| Type d’état Linear | Repère local de lecture |
+| --- | --- |
+| backlog / unstarted | À faire |
+| In Progress (started) | En cours |
+| In Review (started) | À vérifier |
+| Done (completed) | Terminé |
+| triage / canceled / duplicate / inconnu | Aucune projection automatique |
+
+« À trancher », « Bloqué » et « À vérifier » restent des indicateurs de coordination
+ou de preuve. Ils ne créent aucun état Linear. Cette projection de lecture ne
+déplace pas les cartes et n’autorise aucune écriture. Le futur mapping d’écriture
+exigerait des identifiants d’états et un périmètre approuvés.
+
+Les données de simulation v1 migrent vers v2 en conservant colonnes, révisions et
+identifiants d’opérations. Une ancienne position `blocked` de la colonne combinée
+reste dans « Bloqué », avec un signalement à préciser ; aucune décision n’est
+inventée pour répartir les cartes. Les positions originales du navigateur sont
+préservées et ne sont pas automatiquement importées.

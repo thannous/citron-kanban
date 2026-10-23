@@ -55,7 +55,7 @@ function restore() {
   }
 }
 function mergeView(data) {
-  if (data.revision >= board.revision) Object.assign(board, { positions: data.positions, revision: data.revision, updatedAt: data.updatedAt });
+  if (data.revision >= board.revision) Object.assign(board, { positions: data.positions, revision: data.revision, updatedAt: data.updatedAt, legacySplitReview: data.legacySplitReview || [] });
 }
 async function refresh(silent = false) {
   if (loading || busy) return;
@@ -94,6 +94,7 @@ function render() {
   status();
   if (!board) return;
   const root = $('board'); root.replaceChildren();
+  if ($('mapping')) $('mapping').textContent = 'Mapping de lecture : Backlog / Todo → À faire ; In Progress → En cours ; In Review → À vérifier ; Done → Terminé. À trancher et Bloqué : coordination distincte, aucun nouvel état Linear. Les autres états restent sans projection.';
   const presentation = board.presentation;
   if (presentation) {
     $('brand').textContent = presentation.brand;
@@ -124,6 +125,7 @@ function render() {
       card.addEventListener('dragend', () => { drag = null; });
       card.append(node('span', 'tag ' + c.type, c.tag), node('h2', '', c.title), node('p', '', c.body), node('p', 'next', c.next));
       if (c.owner) card.append(node('p', 'owner', 'Responsable de coordination : ' + c.owner + ' · sans échéance'));
+      if (col === 'blocked' && (board.legacySplitReview?.includes(c.id) || (c.legacyCombined && board.positions[c.id].revision === 0))) card.append(node('p', 'migration', 'Ancienne colonne « À trancher / bloqué » : position conservée dans Bloqué, à préciser.'));
       const links = c.links || (c.link ? [[c.ref, c.link]] : []);
       for (const [text, url] of links) {
         const wrap = node('p'); const a = node('a', '', text + ' ↗'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; wrap.append(a); card.append(wrap);
@@ -131,7 +133,8 @@ function render() {
       for (const ref of c.issueRefs) {
         const issue = board.linear.issues.find(i => i.id === ref);
         const source = board.linear.mode === 'snapshot' ? `dans Linear · lu le ${date(board.linear.capturedAt)}` : 'dans le jeu fictif';
-        card.append(node('p', 'linear-state', issue ? `${ref} · ${issue.status} ${source}` : `${ref} · état Linear inconnu`));
+        const mapped = issue && (board.linearMapping?.byName[issue.status] || board.linearMapping?.byType[issue.statusType]);
+        card.append(node('p', 'linear-state', issue ? `${ref} · ${issue.status} ${source} · repère : ${mapped ? label(mapped) : 'sans projection'}` : `${ref} · état Linear inconnu`));
       }
       if (!c.issueRefs.length) card.append(node('p', 'context-state', 'Contexte de coordination · sans ticket Linear associé'));
       const field = node('label', 'move'); field.append(document.createTextNode(mode === 'demo' ? 'Tester un déplacement' : 'Coordination'));

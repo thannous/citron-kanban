@@ -12,13 +12,20 @@ export class DemoStore {
   async init() {
     try {
       this.data = JSON.parse(await readFile(this.path, 'utf8'));
-      if (this.data.schemaVersion !== 1 || !Number.isSafeInteger(this.data.revision) ||
+      if (![1,2].includes(this.data.schemaVersion) || !Number.isSafeInteger(this.data.revision) ||
           !Array.isArray(this.data.operations) || this.data.operations.length > 500 ||
           Object.keys(this.data.positions).length !== this.seed.cards.length ||
           !this.seed.cards.every(c => this.validPosition(this.data.positions[c.id]))) throw Error('Invalid store');
+      if (this.data.schemaVersion === 1) {
+        const migrated = structuredClone(this.data);
+        migrated.schemaVersion = 2;
+        migrated.legacySplitReview = Object.keys(migrated.positions).filter(id => migrated.positions[id].col === 'blocked');
+        await this.persist(migrated);
+        this.data = migrated;
+      }
     } catch (e) {
       if (e.code !== 'ENOENT') throw new DomainError('DEMO_STORE_INVALID', 503);
-      this.data = { schemaVersion: 1, revision: 0, updatedAt: null, positions: Object.fromEntries(this.seed.cards.map(c => [c.id, { col: c.col, revision: 0 }])), operations: [] };
+      this.data = { schemaVersion: 2, revision: 0, updatedAt: null, legacySplitReview: [], positions: Object.fromEntries(this.seed.cards.map(c => [c.id, { col: c.col, revision: 0 }])), operations: [] };
       await this.persist(this.data);
     }
   }
@@ -29,7 +36,7 @@ export class DemoStore {
     await writeFile(tmp, JSON.stringify(data, null, 2) + '\n', { mode: 0o600 });
     await rename(tmp, this.path);
   }
-  view() { return structuredClone({ revision: this.data.revision, updatedAt: this.data.updatedAt, positions: this.data.positions }); }
+  view() { return structuredClone({ revision: this.data.revision, updatedAt: this.data.updatedAt, positions: this.data.positions, legacySplitReview: this.data.legacySplitReview || [] }); }
   move(input) {
     const result = this.lock.then(() => this.commit(input));
     this.lock = result.catch(() => {});
@@ -53,6 +60,7 @@ export class DemoStore {
     next.revision += 1;
     next.updatedAt = new Date().toISOString();
     next.positions[cardId] = { col, revision: current.revision + 1 };
+    next.legacySplitReview = (next.legacySplitReview || []).filter(id => id !== cardId);
     next.operations.push({ cardId, col, baseRevision, operationId });
     next.operations = next.operations.slice(-500);
     try { await this.persist(next); } catch { throw new DomainError('SAVE_FAILED', 503); }

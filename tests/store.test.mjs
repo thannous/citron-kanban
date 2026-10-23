@@ -58,6 +58,20 @@ test('corrupt existing store is preserved and startup fails closed', async t => 
   await assert.rejects(new DemoStore(seed, path).init(), { code: 'DEMO_STORE_INVALID' });
   assert.equal(await readFile(path, 'utf8'), '{broken');
 });
+test('v1 combined-column migration keeps every position, revision and operation', async t => {
+  const {store,path}=await fixture(t);
+  await store.move(op({col:'blocked'}));
+  const old=JSON.parse(await readFile(path,'utf8'));old.schemaVersion=1;delete old.legacySplitReview;
+  await writeFile(path,JSON.stringify(old));
+  const migrated=new DemoStore(seed,path);await migrated.init();
+  const saved=JSON.parse(await readFile(path,'utf8'));
+  assert.equal(saved.schemaVersion,2);assert.deepEqual(saved.positions,old.positions);
+  assert.equal(saved.revision,old.revision);assert.deepEqual(saved.operations,old.operations);
+  assert.ok(migrated.view().legacySplitReview.includes('drive'));
+  assert.equal((await migrated.move(op({col:'blocked'}))).duplicate,true);
+  await migrated.move(op({col:'decide',baseRevision:1,operationId:'operation-0002'}));
+  assert.equal(migrated.view().positions.drive.col,'decide');assert.ok(!migrated.view().legacySplitReview.includes('drive'));
+});
 test('browser drafts and voluntary legacy positions validate all entries before use', () => {
   assert.deepEqual(validateDraft({schemaVersion:1,pending:[op()]}, seed), [op()]);
   assert.throws(() => validateDraft({schemaVersion:1,pending:[op(),op()]}, seed));
