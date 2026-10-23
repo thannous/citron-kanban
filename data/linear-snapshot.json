@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "mode": "fixture",
+  "projectId": "demo-project",
+  "projectName": "Projet fictif",
+  "capturedAt": null,
+  "source": "Données fictives · aucune lecture réelle",
+  "issues": [
+    {
+      "id": "DEMO-101",
+      "uuid": "demo-issue-101",
+      "title": "Préparer le dossier de démonstration",
+      "url": "https://example.org/issues/DEMO-101",
+      "updatedAt": null,
+      "status": "Backlog",
+      "statusType": "backlog",
+      "projectId": "demo-project",
+      "teamId": "demo-team"
+    }
+  ]
+}

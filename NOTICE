@@ -1,0 +1,9 @@
+Cette licence MIT s’applique au code générique de ce compagnon et à ses données
+fictives. Elle ne couvre aucun document ou jeu de données privé chargé localement.
+La mention collective « Citron Kanban contributors » n’attribue pas de droits
+exclusifs à une personne ou à une organisation non vérifiée.
+
+Le runtime utilise exclusivement la bibliothèque standard Node.js et les API Web.
+Aucune police, image, icône ou ressource distante n’est incorporée.
+Les dépendances éventuelles de test conservent leurs licences propres ; aucune
+redistribution de leur code source n’est incluse dans ce dépôt.

@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "cols": [
+    [
+      "todo",
+      "À faire"
+    ],
+    [
+      "doing",
+      "En cours"
+    ],
+    [
+      "blocked",
+      "À trancher / bloqué"
+    ],
+    [
+      "verify",
+      "À vérifier"
+    ],
+    [
+      "done",
+      "Terminé / prouvé"
+    ]
+  ],
+  "cards": [
+    {
+      "id": "drive",
+      "col": "todo",
+      "tag": "Produit",
+      "type": "product",
+      "title": "Préparer le dossier de démonstration",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": [
+        "DEMO-101"
+      ],
+      "link": "https://example.org/issues/DEMO-101",
+      "ref": "DEMO-101 · Ticket fictif"
+    },
+    {
+      "id": "listing",
+      "col": "todo",
+      "tag": "Exemple",
+      "type": "project",
+      "title": "Lister les éléments à traiter",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "metre",
+      "col": "todo",
+      "tag": "Qualité",
+      "type": "quality",
+      "title": "Relever les quantités exemple",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "excel",
+      "col": "todo",
+      "tag": "Produit",
+      "type": "product",
+      "title": "Relier les coûts fictifs",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "plans",
+      "col": "blocked",
+      "tag": "Exemple",
+      "type": "project",
+      "title": "Confirmer les variantes de démonstration",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "supply",
+      "col": "blocked",
+      "tag": "Qualité",
+      "type": "quality",
+      "title": "Arbitrer les paramètres exemple",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "acceptance",
+      "col": "blocked",
+      "tag": "Produit",
+      "type": "product",
+      "title": "Définir les critères de revue",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "merge",
+      "col": "verify",
+      "tag": "Exemple",
+      "type": "project",
+      "title": "Vérifier une fusion fictive",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "pdf",
+      "col": "verify",
+      "tag": "Qualité",
+      "type": "quality",
+      "title": "Tester les documents exemples",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "chatgpt",
+      "col": "done",
+      "tag": "Produit",
+      "type": "product",
+      "title": "Vérifier un scénario de test",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    },
+    {
+      "id": "access",
+      "col": "done",
+      "tag": "Exemple",
+      "type": "project",
+      "title": "Vérifier un accès de test",
+      "body": "Donnée fictive destinée à la démonstration du compagnon Kanban.",
+      "next": "Relire les éléments et confirmer la prochaine étape de test.",
+      "issueRefs": []
+    }
+  ],
+  "presentation": {
+    "brand": "Compagnon / Tableau citron",
+    "title": "Cap sur le prochain pas.",
+    "description": "Un tableau de coordination privé, des tickets de référence et une synchronisation dont chaque état est visible.",
+    "summary": [
+      "Prochain petit pas",
+      "Jeu de données fictif",
+      "Scénario de démonstration"
+    ],
+    "decisions": [
+      "Confirmer les documents de démonstration et leurs variantes.",
+      "Définir les règles de correspondance avec les états du gestionnaire de tickets.",
+      "Valider les preuves attendues avant de déclarer une tâche terminée."
+    ]
+  }
+}

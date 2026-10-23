@@ -1,0 +1,27 @@
+{
+  "name": "citron-kanban",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Compagnon Kanban citron avec adaptateur local de simulation, instantané et gestion explicite des conflits.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "e2e run"
+  },
+  "devDependencies": {
+    "@e2e-dev/web": "0.15.3",
+    "e2e": "0.21.3"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  }
+}

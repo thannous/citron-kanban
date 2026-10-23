@@ -1,0 +1,14 @@
+.private/
+.runtime/
+.e2e/
+.next/
+out/
+node_modules/
+.env
+.env.*
+*.log
+*.png
+*.webm
+*.mp4
+.DS_Store
+
